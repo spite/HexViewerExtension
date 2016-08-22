@@ -24,7 +24,15 @@ var source = '(' + function () {
 	'use strict';
 
 	var supportedTypes = [
-		{ type: 'Float32Array', instance: Float32Array }
+		{ type: 'Int8Array', instance: Int8Array },
+		{ type: 'Uint8Array', instance: Uint8Array },
+		{ type: 'Uint8ClampedArray', instance: Uint8ClampedArray },
+		{ type: 'Int16Array', instance: Int16Array },
+		{ type: 'Uint16Array', instance: Uint16Array },
+		{ type: 'Int32Array', instance: Int32Array },
+		{ type: 'Uint32Array', instance: Uint32Array },
+		{ type: 'Float32Array', instance: Float32Array },
+		{ type: 'Float64Array', instance: Float64Array }
 	];
 
 	window.console.view = function( obj ) {

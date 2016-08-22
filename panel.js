@@ -14,12 +14,25 @@ function onWindowResize() {
 
 onWindowResize();
 
+var supportedTypes = {
+	'Int8Array': Int8Array,
+	'Uint8Array': Uint8Array,
+	'Uint8ClampedArray': Uint8ClampedArray,
+	'Int16Array': Int16Array,
+	'Uint16Array': Uint16Array,
+	'Int32Array': Int32Array,
+	'Uint32Array': Uint32Array,
+	'Float32Array': Float32Array,
+	'Float64Array': Float64Array
+};
+
 function setSource( src ){
 
 	var data = [];
 
-	switch( src.type ) {
-		case 'Float32Array': data = new Float32Array( src.object ); break;
+	var instance = supportedTypes[ src.type ];
+	if( instance ) {
+		data = new instance( src.object );
 	}
 
 	memViewer.set( data );
