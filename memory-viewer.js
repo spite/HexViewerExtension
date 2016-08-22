@@ -339,6 +339,12 @@ MemoryViewer.prototype.updateContainer = function() {
         this.container.appendChild( div );
     }
 
+	for( var i = 0; i < this.container.childNodes.length; i++ ) {
+        for( var j = 0; j < 4; j++ ) {
+			this.container.childNodes[ i ].childNodes[ j ].textContent = '00';
+		}
+	}
+
     if( this.options.showCharMap ) {
 
         while( this.charPanel.childNodes.length > targetRows ) {
