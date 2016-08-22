@@ -1,0 +1,26 @@
+{
+	"name": "HexViewer",
+	"short_name": "HexViewer",
+	"version": "1.0.0",
+	"minimum_chrome_version": "10.0",
+	"description": "HexViewer",
+	"background": {
+		"scripts": [
+			"background.js"
+		]
+	},
+	 "devtools_page": "devtools.html",
+	"permissions": [
+		"tabs","<all_urls>"
+	],
+	"content_scripts": [{
+		"matches": ["<all_urls>"],
+		"js": [ "content-script.js" ],
+		"run_at": "document_start",
+		"all_frames": true
+	} ],
+	"manifest_version": 2,
+	"web_accessible_resources": [
+		"polyfill.js"
+	]
+}
