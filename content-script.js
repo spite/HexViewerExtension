@@ -35,7 +35,9 @@ var source = '(' + function () {
 		{ type: 'Float64Array', instance: Float64Array }
 	];
 
-	window.console.view = function( obj ) {
+	function checkType( obj ) {
+
+		if( typeof obj === 'string' ) return 'String';
 
 		var type = null;
 
@@ -45,12 +47,46 @@ var source = '(' + function () {
 			}
 		} )
 
+		return type;
+
+	}
+
+	var oldConsoleLog = window.console.log;
+
+	window.console.log = function() {
+
+		[].slice.call( arguments ).some( arg => {
+			var type = checkType( arg )
+			if( type ) {
+				sendObject( arg, type );
+				return true;
+			}
+		} )
+		oldConsoleLog.apply( window, arguments );
+
+	}
+
+	window.console.view = function( obj ) {
+
+		var type = checkType( obj );
+
 		if( type ) {
-			var array = Array.prototype.slice.call( obj );
-			window.postMessage( { source: 'script', method: 'view', type: type, object: array }, '*' );
+			sendObject( obj, type );
 		} else {
 			console.error( 'Type not supported' )
 		}
+
+	}
+
+	function sendObject( obj, type ) {
+
+		var data = null;
+		if( type === 'String' ) {
+			data = obj;
+		} else {
+			data = Array.prototype.slice.call( obj );
+		}
+		window.postMessage( { source: 'script', method: 'view', type: type, data: data }, '*' );
 
 	}
 
