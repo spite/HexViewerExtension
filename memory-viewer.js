@@ -13,7 +13,7 @@ function MemoryViewer() {
 
     this.invalidate = false;
 
-    this.data = null;
+    this.data = [];
     this.offset = 0;
 
     this.cellHeight = 15;
@@ -226,6 +226,7 @@ MemoryViewer.prototype.processSelection = function() {
 MemoryViewer.prototype.set = function( data ) {
 
     this.data = Array.from( data );
+    if( !this.data ) this.data = [];
     this.updateContainer();
 
 }
@@ -291,11 +292,6 @@ MemoryViewer.prototype.computeSizes = function() {
 }
 
 MemoryViewer.prototype.updateContainer = function() {
-
-    if( !this.data ) {
-    	console.error( 'NO DATA!' );
-    	return;
-    }
 
     this.cellWidth = this.options.expandedMode ? 90 : 55;
     if( this.options.expandedMode ) this.domElement.classList.add( 'expanded' );
