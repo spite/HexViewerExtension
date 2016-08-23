@@ -260,7 +260,7 @@ MemoryViewer.prototype.computeSizes = function() {
         var containerWidth = this.cellWidth * j;
         var charWidth = ( this.options.showCharMap ) ? j * 4 * 6 : 0;
         var digits = ( this.data.length + '' ).length;
-        var gutterWidth = 10 + digits * 8;
+        var gutterWidth = 20 + digits * 8;
         var colorWidth = ( this.options.showColorMap ) ? j * 4 * 4  : 0;
 
         var totalWidth = gutterWidth + 8 + containerWidth + colorWidth + charWidth + 20;
