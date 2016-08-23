@@ -1,6 +1,10 @@
 var devtools = {};
 var scripts = {}
 
+var script = '';
+
+fetch( chrome.extension.getURL( 'inject.js' ) ).then( res => res.text() ).then( res => script = res )
+
 chrome.runtime.onConnect.addListener( function( port ) {
 
 	console.log( 'New connection (chrome.runtime.onConnect ) from ', port.name, port );
@@ -17,9 +21,19 @@ chrome.runtime.onConnect.addListener( function( port ) {
 		if( name === 'devtools' ) devtools[ tabId ] = port;
 		if( name === 'content-script' ) scripts[ tabId ] = port;
 
+		if( name === 'devtools' ) {
+			if( msg.method === 'ready' ) {
+				port.postMessage( { method: 'script', script: script } )
+			}
+		}
+
 		if( name === 'content-script' ) {
-			if( devtools[ tabId ] ) {
-				devtools[ tabId ].postMessage( msg );
+			if( msg.method === 'ready' ) {
+				port.postMessage( { method: 'script', script: script } )
+			} else {
+				if( devtools[ tabId ] ) {
+					devtools[ tabId ].postMessage( msg );
+				}
 			}
 		}
 		console.log( msg, sender, reply );
