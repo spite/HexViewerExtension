@@ -32,7 +32,8 @@ function setSource( src ){
 
 	var instance = supportedTypes[ src.type ];
 	if( instance ) {
-		data = new instance( src.object );
+		var array = new instance( src.object );
+		data = new Uint8Array( array.buffer, 0, instance.BYTES_PER_ELEMENT * array.length );
 	}
 
 	memViewer.set( data );
