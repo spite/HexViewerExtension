@@ -1,3 +1,16 @@
+function log() {
+
+	var args = Array.from( arguments );
+	args.unshift( 'background: #E07000; color: #ffffff; text-shadow: 0 -1px #000; padding: 4px 0 4px 0; line-height: 0' );
+	args.unshift( `%c HexViewer ` );
+
+	console.log.apply( console, args );
+
+}
+
+var extensionId = chrome.runtime.id;
+log( 'Background', extensionId );
+
 var devtools = {};
 var scripts = {}
 
@@ -7,7 +20,7 @@ fetch( chrome.extension.getURL( 'inject.js' ) ).then( res => res.text() ).then( 
 
 chrome.runtime.onConnect.addListener( function( port ) {
 
-	console.log( 'New connection (chrome.runtime.onConnect ) from ', port.name, port );
+	log( 'New connection (chrome.runtime.onConnect) from', port.name, port );
 
 	var name = port.name;
 
@@ -20,6 +33,8 @@ chrome.runtime.onConnect.addListener( function( port ) {
 
 		if( name === 'devtools' ) devtools[ tabId ] = port;
 		if( name === 'content-script' ) scripts[ tabId ] = port;
+
+		log( 'port.onMessage', port.name, msg );
 
 		if( name === 'devtools' ) {
 			if( msg.method === 'ready' ) {
@@ -36,7 +51,6 @@ chrome.runtime.onConnect.addListener( function( port ) {
 				}
 			}
 		}
-		console.log( msg, sender, reply );
 
 	}
 
@@ -46,7 +60,7 @@ chrome.runtime.onConnect.addListener( function( port ) {
 
 		port.onMessage.removeListener( listener );
 
-		console.log( name, 'disconnect (chrome.runtime.onDisconnect)' );
+		log( name, 'disconnect (chrome.runtime.onDisconnect)' );
 
 	} );
 

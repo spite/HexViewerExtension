@@ -47,7 +47,7 @@ port.onMessage.addListener( function( msg ) {
 function poll() {
 
 	chrome.devtools.inspectedWindow.eval( 'window.__HEXVIEWER_CHECK()', function(result, isException) {
-		if( result ) {
+		if( result && panelWindow ) {
 			panelWindow.setSource( result );
 		}
 	} );

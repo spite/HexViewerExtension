@@ -2,7 +2,17 @@
 
 if( !window.__HEXVIEWER_INJECTED ) {
 
-	console.log( 'HexViewer injected', document.location.href );
+	function log() {
+
+		var args = Array.from( arguments );
+		args.unshift( 'background: #E07000; color: #ffffff; text-shadow: 0 -1px #000; padding: 4px 0 4px 0; line-height: 0' );
+		args.unshift( `%c HexViewer ` );
+
+		console.log.apply( console, args );
+
+	}
+
+	log( 'HexViewer injected', document.location.href );
 
 	window.__HEXVIEWER_INJECTED = true;
 
@@ -69,7 +79,7 @@ if( !window.__HEXVIEWER_INJECTED ) {
 		} else {
 			data = Array.prototype.slice.call( obj );
 		}
-		var message = { source: 'script', method: 'view', type: type, data: data };
+		var message = { source: 'hexviewer-script', method: 'view', type: type, data: data };
 		window.postMessage( message, '*' );
 		reference = message;
 	}
