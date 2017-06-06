@@ -1,6 +1,10 @@
-'use strict';
-
 if( !window.__HEXVIEWER_INJECTED ) {
+
+	let port = chrome.runtime.connect( extensionId, { name: "inject-script" } );
+	port.postMessage( { method: 'ready' });
+	log( port );
+
+	//chrome.runtime.sendMessage( extensionId, {}, function( res ) { log(res) } );
 
 	function log() {
 
@@ -16,7 +20,7 @@ if( !window.__HEXVIEWER_INJECTED ) {
 
 	window.__HEXVIEWER_INJECTED = true;
 
-	var supportedTypes = [
+	const supportedTypes = [
 		{ type: 'Int8Array', instance: Int8Array },
 		{ type: 'Uint8Array', instance: Uint8Array },
 		{ type: 'Uint8ClampedArray', instance: Uint8ClampedArray },
@@ -31,12 +35,15 @@ if( !window.__HEXVIEWER_INJECTED ) {
 	function checkType( obj ) {
 
 		if( typeof obj === 'string' ) return 'String';
+		if( typeof obj === 'object' ) {
+			if( obj.constructor === Array ) return 'Array';
+		}
 
 		var type = null;
 
 		supportedTypes.forEach( t => {
 			if( obj instanceof t.instance ) {
-				type = t.type;
+				type = t;
 			}
 		} )
 
@@ -46,7 +53,7 @@ if( !window.__HEXVIEWER_INJECTED ) {
 
 	var oldConsoleLog = window.console.log;
 
-	window.console.log = function() {
+	/*window.console.log = function() {
 
 		[].slice.call( arguments ).some( arg => {
 			var type = checkType( arg )
@@ -57,9 +64,11 @@ if( !window.__HEXVIEWER_INJECTED ) {
 		} )
 		oldConsoleLog.apply( window, arguments );
 
-	}
+	}*/
 
-	window.console.view = function( obj ) {
+	window.view = function( obj ) {
+
+		log( 'view', performance.now() );
 
 		var type = checkType( obj );
 
@@ -77,11 +86,24 @@ if( !window.__HEXVIEWER_INJECTED ) {
 		if( type === 'String' ) {
 			data = obj;
 		} else {
-			data = Array.prototype.slice.call( obj );
+			data = obj;//obj.slice().buffer;// obj.buffer;//Array.prototype.slice.call( obj );
+			//data = Array.prototype.slice.call( obj );
 		}
-		var message = { source: 'hexviewer-script', method: 'view', type: type, data: data };
-		window.postMessage( message, '*' );
-		reference = message;
+		var message = {
+			source: 'hexviewer-script',
+			method: 'view',
+			type: type.type,
+			data: data,
+			time: performance.now()
+		};
+		//window.postMessage( message, '*', [ data ] );//'*' );
+		//window.postMessage( message, '*' );
+
+		var e = new CustomEvent( 'hexviewer-view', { detail: message } );
+		window.dispatchEvent( e );
+		 //window.postMessage({ type: "FROM_PAGE", text: "Hello from the webpage!" }, "*");
+
+		//reference = message;
 	}
 
 	var reference = null;

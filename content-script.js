@@ -35,10 +35,27 @@ port.onMessage.addListener( function( msg ) {
 
 } );
 
-port.onDisconnect.addEventListener( function() {
+port.onDisconnect.addListener( function() {
 	port = null;
 	log( 'Port disconnected' );
 })
+
+chrome.runtime.onConnect.addListener( function( port ) {
+
+	log( 'New connection (chrome.runtime.onConnect) from', port.name, port );
+
+} );
+
+window.addEventListener( 'hexviewer-view', e => {
+
+	let message = e.detail;
+	let t = performance.now();
+	log( t - message.time );
+	message.data = Array.prototype.slice.call( message.data );
+	message.time = t;
+	port.postMessage( message );
+
+});
 
 window.addEventListener( 'message', function(event) {
 
@@ -54,7 +71,28 @@ window.addEventListener( 'message', function(event) {
 		return;
 	}
 
-	port.postMessage( message );
+	log( 'onMessage', performance.now() );
+
+	if( message.method === 'view' ) {
+
+		console.log( performance.now() - message.time );
+		message.data = Array.prototype.slice.call( message.data );
+
+		/*log( 'turnToString', performance.now() );
+		var bytes = new Uint8Array( new Float32Array( message.data ).buffer );
+		var values = new Array( bytes.length );
+		for( var j = 0; j < bytes.length; j++ ) {
+			values[ j ] = String.fromCharCode( bytes[ j ] );
+		}
+		var str = values.join('');
+
+		message.string = str;*/
+		//log( 'port.postMessage', performance.now() );
+		port.postMessage( message );
+
+	} else {
+		port.postMessage( message );
+	}
 
 } );
 

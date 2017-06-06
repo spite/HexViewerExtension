@@ -1,23 +1,66 @@
-*{ box-sizing: border-box;}
-body {
-	font-family: tahoma;
-	background-color: #f0f0f0;
-	margin: 0px;
-	font-size: 12px;
+.tav-container{
+	font-family: roboto mono;
+	font-size: 10px;
+	width: 100%;
+	height: 100%;
+	position: relative;
 }
-p{ color: white; position: absolute; left: 10px; top: 5px; text-shadow: 0 -1px 0 rgba( 0, 0, 0, .6 ); z-index: 100;}
-#mem-viewer{ font-family: Inconsolata, monospace; color: black; font-size: 12px; line-height: 1.2em; position: absolute; left: 20px; top: 20px; right: 20px; bottom: 20px; }
-#mem-viewer .base{ position: absolute; left: 0; top: 0; right: 0; bottom: 0; }
-#mem-viewer .word, #mem-viewer .line-number{ margin: 0; padding:0; cursor: default; line-height: 1.4em ;}
-#mem-viewer .byte:hover{ background-color: orange;}
-#mem-viewer .expanded .byte{ margin-right: .5em;}
-#mem-viewer .hex-panel{ position: absolute; left: 0; top: 0; right: 0; bottom: 50px; }
-#mem-viewer .container{ position: absolute; right: 20px; top: 0; left: 50px; bottom: 0; overflow: hidden }
-#mem-viewer .color-panel{ position: absolute; width: 200px; right: 30px; top: 0; bottom: 0; overflow: hidden; }
-#mem-viewer .char-panel{ position: absolute; width: 200px; right: 30px; top: 0; bottom: 0; overflow: hidden; }
-#mem-viewer .gutter{ position: absolute; left: 0; top: 0; bottom: 0; width: 50px; text-align: right; padding-right: .5em; background-color: rgba( 222, 222, 222, .5 ); border-right: 1px solid #808080; overflow: hidden; }
-#mem-viewer .info-panel{ position: absolute; left: 0; bottom: 25px; text-align: left;}
-#mem-viewer .position-label{ position: absolute; left: 0; bottom: 10px; text-align: left;}
-#mem-viewer .background{ box-shadow: inset 0 0 1px black; position: absolute; left: 0; top: 0; right: 0; bottom: 0; background-repeat: repeat-all;}
-#mem-viewer .scrollbar{ position: absolute; left: 0; right: 0; top: 0; bottom: 0; overflow: scroll; }
-#mem-viewer .value-label{ margin-left: .5em;}
+.tav-container * {
+	box-sizing: border-box;
+	margin: 0;
+	padding: 0;
+}
+.tav-viewer{
+	position: absolute;
+	left: 0;
+	top: 0;
+	right: 0;
+	bottom: 60px;
+}
+.tav-info{
+	position: absolute;
+	left: 0;
+	height: 60px;
+	right: 0;
+	bottom: 0;
+}
+.tav-row-gutter{
+	position: absolute;
+	width: 200px;
+	left: 0;
+	top: 0;
+	bottom: 0;
+}
+.tav-cells-container{
+	position: absolute;
+	left: 200px;
+	top: 0;
+	right: 0;
+	bottom: 0;
+}
+.tav-cell{
+	border: 1px solid white;
+	background-color: #efefef;
+	position: absolute;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+.tav-cell:hover{
+	background-color: #dae4ea;
+}
+.tav-cell.selected{
+	background-color: #6b9aba;
+}
+.tav-gutter-cell{
+	border: 1px solid white;
+	background-color: #efefef;
+	position: absolute;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	width: 100%;
+}
+.line{
+	background-color: #ffffff;
+}

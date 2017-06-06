@@ -1,8 +1,8 @@
-var memViewer = new MemoryViewer();
-memViewer.options.showCharMap = false;
-memViewer.options.showColorMap = false;
+var memViewer = new TypedArrayViewer( document.getElementById( 'mem-viewer' ) );
+//memViewer.options.showCharMap = false;
+//memViewer.options.showColorMap = false;
 
-document.getElementById( 'mem-viewer' ).appendChild( memViewer.domElement );
+//document.getElementById( 'mem-viewer' ).appendChild( memViewer.domElement );
 
 window.addEventListener( 'resize', onWindowResize );
 
@@ -47,10 +47,25 @@ function setSource( src ){
 		src.type = 'Uint16Array'
 	}
 
+	if( src.type === 'Array' ) {
+		src.data = src.data;
+		src.type = 'Float32Array'
+	}
+
 	var instance = supportedTypes[ src.type ];
 	if( instance ) {
 		var array = new instance( src.data );
-		data = new Uint8Array( array.buffer, 0, instance.BYTES_PER_ELEMENT * array.length );
+		//console.log( array );
+
+		/*var str = src.string;
+		var ui8 = new Uint8Array( str.length )
+		for( var j = 0; j < str.length; j++ ) {
+			ui8[ j ] = str.charCodeAt( j );
+		}
+		var array = new instance( ui8.buffer );*/
+
+		//data = new Uint8Array( array.buffer, 0, instance.BYTES_PER_ELEMENT * array.length );
+		data = array;
 	}
 
 	memViewer.set( data );

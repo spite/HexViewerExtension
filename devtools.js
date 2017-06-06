@@ -38,6 +38,9 @@ port.onMessage.addListener( function( msg ) {
 	}
 	//chrome.devtools.inspectedWindow.eval( 'console.log("msg");')
 	if( panelWindow ) {
+		let t = performance.now();
+		console.log( t - msg.time );
+		msg.time = t;
 		//chrome.devtools.inspectedWindow.eval( 'console.log("setSource!");')
 		panelWindow.setSource( msg );
 	}
@@ -68,3 +71,9 @@ function initialize( panel ) {
 	} );
 
 }
+
+window.addEventListener( 'message', function(event) {
+
+	debugger;
+
+});

@@ -16,7 +16,7 @@ var scripts = {}
 
 var script = '';
 
-fetch( chrome.extension.getURL( 'inject.js' ) ).then( res => res.text() ).then( res => script = res )
+fetch( chrome.extension.getURL( 'inject.js' ) ).then( res => res.text() ).then( res => script = `let extensionId='${extensionId}';` + res )
 
 chrome.runtime.onConnect.addListener( function( port ) {
 
@@ -46,6 +46,10 @@ chrome.runtime.onConnect.addListener( function( port ) {
 			if( msg.method === 'ready' ) {
 				port.postMessage( { method: 'script', script: script } )
 			} else {
+				log( msg );
+				let t = performance.now();
+				log( t - msg.time );
+				msg.time = t;
 				if( devtools[ tabId ] ) {
 					devtools[ tabId ].postMessage( msg );
 				}
@@ -69,3 +73,9 @@ chrome.runtime.onConnect.addListener( function( port ) {
 	return true;
 
 });
+
+chrome.runtime.onMessage.addListener(
+	function(request, sender, sendResponse) {
+		log( request, sender, sendResponse );
+	}
+);
