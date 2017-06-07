@@ -34,26 +34,16 @@ port.onMessage.addListener( function( msg ) {
 	}
 
 } );
-
+/*
 port.onDisconnect.addEventListener( function() {
 	port = null;
 	log( 'Port disconnected' );
 })
+*/
+window.addEventListener( 'hexviewer-view', e => {
 
-window.addEventListener( 'message', function(event) {
-
-	if( !port ) return;
-
-	if (event.source !== window) {
-		return;
-	}
-
-	var message = event.data;
-
-	if (typeof message !== 'object' || message === null || message.source !== 'hexviewer-script' ) {
-		return;
-	}
-
+	let message = e.detail;
+	message.data = Array.prototype.slice.call( message.data );
 	port.postMessage( message );
 
 } );

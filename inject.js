@@ -46,7 +46,7 @@ if( !window.__HEXVIEWER_INJECTED ) {
 
 	var oldConsoleLog = window.console.log;
 
-	window.console.log = function() {
+	/*window.console.log = function() {
 
 		[].slice.call( arguments ).some( arg => {
 			var type = checkType( arg )
@@ -57,9 +57,21 @@ if( !window.__HEXVIEWER_INJECTED ) {
 		} )
 		oldConsoleLog.apply( window, arguments );
 
-	}
+	}*/
 
 	window.console.view = function( obj ) {
+
+		var type = checkType( obj );
+
+		if( type ) {
+			sendObject( obj, type );
+		} else {
+			console.error( 'Type not supported' )
+		}
+
+	}
+
+	window.view = function( obj ) {
 
 		var type = checkType( obj );
 
@@ -77,10 +89,13 @@ if( !window.__HEXVIEWER_INJECTED ) {
 		if( type === 'String' ) {
 			data = obj;
 		} else {
-			data = Array.prototype.slice.call( obj );
+			data = obj;//Array.prototype.slice.call( obj );
 		}
 		var message = { source: 'hexviewer-script', method: 'view', type: type, data: data };
-		window.postMessage( message, '*' );
+		//window.postMessage( message, '*' );
+		var e = new CustomEvent( 'hexviewer-view', { detail: message } );
+		window.dispatchEvent( e );
+
 		reference = message;
 	}
 
